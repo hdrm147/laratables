@@ -76,7 +76,12 @@ class RecordsTransformer
     {
         $json = explode(":", $columnName);
         if (count($json) > 1) {
-            return $record->{"data"}["buyer"]["name"];
+            $path = explode(".", $json[1]);
+            $value = $record->{"$json[0]"};
+            foreach ($path as $part) {
+                $value = $value["$part"];
+            }
+            return $value;
         }
 
 
