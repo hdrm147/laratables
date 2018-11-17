@@ -104,15 +104,24 @@ class ColumnManager
     {
         $columnName = $column['name'];
 
+        $json = false;
+        $array = explode(":",$columnName );
+        if (count($array) > 1) {
+            $json = true;
+            $columnName = $array[0];
+        }
+
+
         if ($column['searchable'] == 'true') {
             $this->searchColumns[] = $columnName;
         }
+
 
         if ($this->isCustomColumn($columnName) && ! isRelationColumn($columnName)) {
             return;
         }
 
-        if (isRelationColumn($columnName)) {
+        if (isRelationColumn($columnName) && !$json) {
             $this->relationshipsManager->addRelation($columnName);
 
             if ($foreignKeys = $this->relationshipsManager->getRelationSelectColumns($columnName)) {

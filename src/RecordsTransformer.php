@@ -74,6 +74,12 @@ class RecordsTransformer
      */
     protected function getColumnValue($columnName, $record)
     {
+        $json = explode(":", $columnName);
+        if (count($json) > 1) {
+            return $record->{"data"}["buyer"]["name"];
+        }
+
+
         // Set custom column value from the class static method
         if ($methodName = $this->columnManager->isCustomColumn($columnName)) {
             return $this->class::$methodName($record);
@@ -90,6 +96,7 @@ class RecordsTransformer
         if ($this->isCarbonInstance($record->$columnName)) {
             return $record->$columnName->format(config('laratables.date_format', 'Y-m-d H:i:s'));
         }
+
 
         return $record->$columnName;
     }
